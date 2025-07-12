@@ -1,0 +1,12 @@
+2025-07-12 21:13:33: -- Analysis Started by User
+2025-07-12 21:13:34: Changes: 4, Conflicts: 0, CopyTime: 0, CopyState: 0/0, Errors: 0, All: 9789
+2025-07-12 21:13:34: Left to Right: Copy File: 4 
+2025-07-12 21:13:34: -- Analysis Complete. Time 00:00:01, Speed: 9789 files/s
+2025-07-12 21:13:34: 
+2025-07-12 21:13:36: == Sync Started by User
+2025-07-12 21:13:36: Copy Over '/Users/erhangocmez/CALCULATIONS/Version 2/__pycache__/portfolio_app.cpython-39.pyc' -> '/Users/erhangocmez/Downloads/CALCULATIONS/Version 2/__pycache__/portfolio_app.cpython-39.pyc'
+2025-07-12 21:13:36: Copy Over '/Users/erhangocmez/CALCULATIONS/Version 2/portfolio_app.py' -> '/Users/erhangocmez/Downloads/CALCULATIONS/Version 2/portfolio_app.py'
+2025-07-12 21:13:36: Copy Over '/Users/erhangocmez/CALCULATIONS/Version 2/style.css' -> '/Users/erhangocmez/Downloads/CALCULATIONS/Version 2/style.css'
+2025-07-12 21:13:36: Copy Over '/Users/erhangocmez/CALCULATIONS/Version 2/templates/calculator.html' -> '/Users/erhangocmez/Downloads/CALCULATIONS/Version 2/templates/calculator.html'
+2025-07-12 21:13:37: == Sync Complete. Time: 00:00:01, Speed: 0.0/s, OK: 4, Errors: 0
+2025-07-12 21:13:37: 

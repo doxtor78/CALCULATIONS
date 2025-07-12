@@ -1,0 +1,12 @@
+2025-07-12 21:42:26: -- Analysis Started by User
+2025-07-12 21:42:27: Changes: 4, Conflicts: 0, CopyTime: 0, CopyState: 0/0, Errors: 0, All: 9791
+2025-07-12 21:42:27: Left to Right: Copy File: 3 Delete File: 1 
+2025-07-12 21:42:27: -- Analysis Complete. Time 00:00:01, Speed: 9791 files/s
+2025-07-12 21:42:27: 
+2025-07-12 21:42:29: == Sync Started by User
+2025-07-12 21:42:29: Delete File '/Users/erhangocmez/Downloads/CALCULATIONS/Version 2/style.css'
+2025-07-12 21:42:29: Create Folder '/Users/erhangocmez/Downloads/CALCULATIONS/Version 2/static'
+2025-07-12 21:42:29: Copy New '/Users/erhangocmez/CALCULATIONS/Version 2/static/style.css' -> '/Users/erhangocmez/Downloads/CALCULATIONS/Version 2/static/style.css'
+2025-07-12 21:42:29: Copy Over '/Users/erhangocmez/CALCULATIONS/Version 2/templates/calculator.html' -> '/Users/erhangocmez/Downloads/CALCULATIONS/Version 2/templates/calculator.html'
+2025-07-12 21:42:29: == Sync Complete. Time: 00:00:00, Speed: 0.0/s, OK: 4, Errors: 0
+2025-07-12 21:42:29: 
