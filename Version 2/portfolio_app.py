@@ -14,11 +14,7 @@ from bybit_balances import get_bybit_balances
 import pandas as pd
 import csv
 
-# Check if running in virtual environment
-if not hasattr(sys, 'real_prefix') and not hasattr(sys, 'base_prefix') or sys.base_prefix == sys.prefix:
-    print("ERROR: This script must be run in the virtual environment (venv).")
-    print("Please activate the virtual environment first with: source venv/bin/activate")
-    sys.exit(1)
+# Removed virtual environment activation check
 
 app = Flask(__name__)
 app.secret_key = 'your_super_secret_key_here' # Replace with a real secret key
@@ -283,39 +279,24 @@ def calculator():
             # --- Final Rendering ---
             if 'save' in request.form:
                 try:
-                    # Use an absolute path to ensure the file is in the 'Version 2' directory
-                    log_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'entry_log.csv')
-                    fieldnames = [
-                        'timestamp', 'trade_side', 'calculation_type', 'avg_entry', 
-                        'position_size_btc', 'position_size_usd', 'leverage', 'real_rr',
-                        'entry_1', 'entry_2', 'sl', 'tp1', 'tp5'
-                    ]
-                    file_exists = os.path.isfile(log_file)
-                    with open(log_file, 'a', newline='') as f:
-                        writer = csv.DictWriter(f, fieldnames=fieldnames)
-                        if not file_exists:
-                            writer.writeheader()
-                        
-                        calc_type = inputs.get('calculation_type', 'symmetric')
-                        res_to_save = results[calc_type]
-
-                        row = {
-                            'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-                            'trade_side': inputs.get('trade_side'),
-                            'calculation_type': calc_type,
-                            'avg_entry': res_to_save.get('avg_entry'),
-                            'position_size_btc': res_to_save.get('position_size_btc'),
-                            'position_size_usd': res_to_save.get('position_size_usd'),
-                            'leverage': res_to_save.get('leverage'),
-                            'real_rr': res_to_save.get('real_rr'),
-                            'entry_1': inputs.get('entry_1'),
-                            'entry_2': inputs.get('entry_2'),
-                            'sl': inputs.get('sl'),
-                            'tp1': inputs.get('tp1'),
-                            'tp5': inputs.get('tp5'),
-                        }
-                        writer.writerow(row)
-                    
+                    calc_type = inputs.get('calculation_type', 'symmetric')
+                    res_to_save = results[calc_type]
+                    row = {
+                        'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                        'trade_side': inputs.get('trade_side'),
+                        'calculation_type': calc_type,
+                        'avg_entry': res_to_save.get('avg_entry'),
+                        'position_size_btc': res_to_save.get('position_size_btc'),
+                        'position_size_usd': res_to_save.get('position_size_usd'),
+                        'leverage': res_to_save.get('leverage'),
+                        'real_rr': res_to_save.get('real_rr'),
+                        'entry_1': inputs.get('entry_1'),
+                        'entry_2': inputs.get('entry_2'),
+                        'sl': inputs.get('sl'),
+                        'tp1': inputs.get('tp1'),
+                        'tp5': inputs.get('tp5'),
+                    }
+                    save_entry_to_csv_and_df(row)
                     save_message = "Entries saved successfully!"
                 except Exception as ex:
                     save_message = f"Error saving: {ex}"
@@ -619,6 +600,46 @@ def get_prices(symbols):
     except requests.exceptions.RequestException as e:
         print(f"Error calling CoinMarketCap API: {e}")
         return {}
+
+# Global DataFrame to hold trade entries in memory
+entries_df = None
+
+# Helper function to save entry to CSV and DataFrame
+def save_entry_to_csv_and_df(row_dict):
+    global entries_df
+    log_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'entry_log.csv')
+    fieldnames = [
+        'timestamp', 'trade_side', 'calculation_type', 'avg_entry', 
+        'position_size_btc', 'position_size_usd', 'leverage', 'real_rr',
+        'entry_1', 'entry_2', 'sl', 'tp1', 'tp5'
+    ]
+    file_exists = os.path.isfile(log_file)
+    # Save to CSV
+    with open(log_file, 'a', newline='') as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        if not file_exists:
+            writer.writeheader()
+        writer.writerow(row_dict)
+    # Update DataFrame
+    if entries_df is None:
+        entries_df = pd.read_csv(log_file)
+    else:
+        entries_df.loc[len(entries_df)] = row_dict
+    return entries_df
+
+@app.route('/show_entries')
+def show_entries():
+    global entries_df
+    if entries_df is None:
+        # Try to load from CSV if not in memory
+        log_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'entry_log.csv')
+        if os.path.isfile(log_file):
+            df = pd.read_csv(log_file)
+        else:
+            return '<h2>No entries found.</h2>'
+    else:
+        df = entries_df
+    return df.to_html(classes='table table-striped', index=False)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5006)
